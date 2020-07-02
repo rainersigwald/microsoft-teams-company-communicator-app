@@ -68,7 +68,7 @@ echo Handling ASP.NET Core Web Application deployment.
 
 :: 1. Restore nuget packages
 echo Restoring NuGet packages
-call :ExecuteCmd dotnet restore "%DEPLOYMENT_SOURCE%\Source\Microsoft.Teams.Apps.CompanyCommunicator.sln"
+call :ExecuteCmd msbuild.exe -t:Restore "%DEPLOYMENT_SOURCE%\Source\Microsoft.Teams.Apps.CompanyCommunicator.sln"
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Restore npm packages
@@ -91,7 +91,7 @@ IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 4. Build and publish
 echo Building the application
-call :ExecuteCmd dotnet publish "%DEPLOYMENT_SOURCE%\Source\Microsoft.Teams.Apps.CompanyCommunicator\Microsoft.Teams.Apps.CompanyCommunicator.csproj" --output "%DEPLOYMENT_TEMP%" --configuration Release -property:KuduDeployment=1
+call :ExecuteCmd msbuild.exe -t:Publish "%DEPLOYMENT_SOURCE%\Source\Microsoft.Teams.Apps.CompanyCommunicator\Microsoft.Teams.Apps.CompanyCommunicator.csproj" -p:OutputPath="%DEPLOYMENT_TEMP%" -p:Configuration=Release -property:KuduDeployment=1
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 5. KuduSync
